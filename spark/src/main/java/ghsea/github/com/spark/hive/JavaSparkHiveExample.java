@@ -44,11 +44,11 @@ public class JavaSparkHiveExample {
                 .enableHiveSupport()
                 .getOrCreate();
 
-        spark.sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING) USING hive");
+        Dataset<Row> r1 = spark.sql("CREATE TABLE IF NOT EXISTS src2 (key INT, value STRING) USING hive");
 //        spark.sql("LOAD DATA LOCAL INPATH 'D:\\workspace_bigdata\\bigdata-practice\\spark\\src\\main\\resources\\kv1.txt' INTO TABLE src");
-        spark.sql("insert into src values (100,'2000')");
+        spark.sql("insert into src2 values (100,'2000')");
         // Queries are expressed in HiveQL
-        spark.sql("SELECT * FROM src").show();
+        spark.sql("SELECT * FROM src2").show();
         // +---+-------+
         // |key|  value|
         // +---+-------+
@@ -58,7 +58,7 @@ public class JavaSparkHiveExample {
         // ...
 
         // Aggregation queries are also supported.
-        spark.sql("SELECT COUNT(*) FROM src").show();
+        spark.sql("SELECT COUNT(*) FROM src2").show();
         // +--------+
         // |count(1)|
         // +--------+
@@ -66,7 +66,7 @@ public class JavaSparkHiveExample {
         // +--------+
 
         // The results of SQL queries are themselves DataFrames and support all normal functions.
-        Dataset<Row> sqlDF = spark.sql("SELECT key, value FROM src WHERE key < 10 ORDER BY key");
+        Dataset<Row> sqlDF = spark.sql("SELECT key, value FROM src2 WHERE key < 10 ORDER BY key");
 
         // The items in DataFrames are of type Row, which lets you to access each column by ordinal.
         Dataset<String> stringsDS = sqlDF.map(
@@ -93,7 +93,7 @@ public class JavaSparkHiveExample {
         recordsDF.createOrReplaceTempView("records");
 
         // Queries can then join DataFrames data with data stored in Hive.
-        spark.sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show();
+        spark.sql("SELECT * FROM records r JOIN src2 s ON r.key = s.key").show();
         // +---+------+---+------+
         // |key| value|key| value|
         // +---+------+---+------+
