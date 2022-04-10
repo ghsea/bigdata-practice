@@ -1,0 +1,6 @@
+target/
+/spark-warehouse/
+/metastore_db/
+
+/derby.log
+/.idea
